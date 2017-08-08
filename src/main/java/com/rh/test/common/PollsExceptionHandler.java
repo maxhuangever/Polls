@@ -19,7 +19,7 @@ public class PollsExceptionHandler {
 	@ExceptionHandler(value = Exception.class)
 	@ResponseBody
 	public Object ExceptionHandler(HttpServletRequest req, Exception e) throws Exception {
-		logger.error("PoolsExceptionHandler---Host {" + req.getRemoteHost() + "} invokes url {" + req.getRequestURL()
+		logger.error("PollsExceptionHandler---Host {" + req.getRemoteHost() + "} invokes url {" + req.getRequestURL()
 				+ "} ERROR: {" + e.getMessage() + "}");
 		e.printStackTrace();	
 		return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);

@@ -51,6 +51,7 @@ public class QuestionsControllerTests {
 	private static Map<String, Object> testQuestionData;
 	private static String questionUrl;// get from response data, will be used in test40_getQuestionDetail
 	private static String choiceUrl;// get from response data, will be used in test50_voteTest
+	private static String nonExistParam="10000";// no data should be found with this param
 	
 	@BeforeClass
 	public static void beforeClass() {     
@@ -69,28 +70,38 @@ public class QuestionsControllerTests {
 	@Test
 	public void test20_createNewQuestion() throws Exception {
 		System.out.println("\n===================test20_createNewQuestion");
+		
+		// wrong param, page are supposed >= 1
+		this.mockMvc.perform(post("/questions").param("page", "0")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(testQuestionData)))
+				.andDo(print())
+				.andExpect(status().isBadRequest());
+		
+		// correct request, and retrieve urls for later use.
 		ResultActions ra = this.mockMvc.perform(post("/questions").param("page", "1")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(testQuestionData)));
-		
+				.content(objectMapper.writeValueAsString(testQuestionData)));		
 		ra.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].question")
 				.value(testQuestionData.get("question").toString()));
 		
-		// populate test url for test40 and test50
+		// populate urls for later methods: test40_... and test50_...
 		this.getTestUrl(ra);
 	}
 	
 	@Test
 	public void test30_listAllQuestions() throws Exception {
 		System.out.println("\n===================test30_listAllQuestions");
+		// should return data since this method is executed after method test20_...
 		this.mockMvc.perform(get("/questions").param("page", "1")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print())
 				.andExpect(status().isOk());
 		
-		this.mockMvc.perform(get("/questions").param("page", "10000")
+		// should have no data found
+		this.mockMvc.perform(get("/questions").param("page", nonExistParam)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print())
 				.andExpect(status().isNoContent());
@@ -99,15 +110,24 @@ public class QuestionsControllerTests {
 	@Test
 	public void test40_getQuestionDetail() throws Exception {
 		System.out.println("\n===================test40_getQuestionDetail");
+		// normal url
 		this.mockMvc.perform(get(questionUrl)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print())
 				.andExpect(status().isOk());
+		
+		// wrong param
+		this.mockMvc.perform(get("/questions/"+nonExistParam)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print())
+				.andExpect(status().isNoContent());
 	}
 	
 	@Test
 	public void test50_voteTest() throws Exception {
 		System.out.println("\n===================test50_voteTest");
+		
+		// first vote
 		String stringResult = this.mockMvc.perform(post(choiceUrl)
 				.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print())

@@ -57,7 +57,7 @@ public class QuestionsService {
 		Assert.isTrue(currentPage>=1, "currentPage should be greater than or equal to 1");
 		currentPage = currentPage - 1;
 		
-		// order
+		// default order with "id"
 		Order idOrder = new Order(Direction.DESC, PollsConstant.SortField);
 		Sort sort = new Sort(idOrder);
 		PageRequest pageRequest = new PageRequest(currentPage, PollsConstant.PageSize, sort);
@@ -75,7 +75,7 @@ public class QuestionsService {
 	}
 
 	public Choice vote(@RequestParam int questionId, @RequestParam int choiceId) {
-		// direct get choice by id
+		// get choice by id
 		Choice choice = choiceRepository.findOne(choiceId);
 		Assert.notNull(choice, "find no record in table by id[" + choiceId + "]");
 		Assert.notNull(choice.getQuestion(), "choice has no related question");
