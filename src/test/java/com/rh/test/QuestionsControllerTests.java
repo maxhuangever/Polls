@@ -30,6 +30,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rh.test.common.PollsConstant;
 import com.rh.test.model.Choice;
 
+/**
+ * These test methods are supposed to be executed by order, since test urls
+ * that later methods use are retrieved from earlier method.
+ * @author 23885_000
+ *
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -53,18 +59,22 @@ public class QuestionsControllerTests {
 
 	@Test
 	public void test10_retrieveEntryPoint() throws Exception {
-		this.mockMvc.perform(get("/")).andDo(print())
+		System.out.println("\n===================test10_retrieveEntryPoint");
+		this.mockMvc.perform(get("/"))
+				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$." + PollsConstant.EntryKey).value(PollsConstant.EntryUrl));
 	}
 
 	@Test
 	public void test20_createNewQuestion() throws Exception {
+		System.out.println("\n===================test20_createNewQuestion");
 		ResultActions ra = this.mockMvc.perform(post("/questions").param("page", "1")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(testQuestionData)));
 		
-		ra.andExpect(status().isOk())
+		ra.andDo(print())
+				.andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].question")
 				.value(testQuestionData.get("question").toString()));
 		
@@ -74,22 +84,28 @@ public class QuestionsControllerTests {
 	
 	@Test
 	public void test30_listAllQuestions() throws Exception {
+		System.out.println("\n===================test30_listAllQuestions");
 		this.mockMvc.perform(get("/questions").param("page", "1")
 				.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print())
 				.andExpect(status().isOk());
 	}
 	
 	@Test
 	public void test40_getQuestionDetail() throws Exception {
+		System.out.println("\n===================test40_getQuestionDetail");
 		this.mockMvc.perform(get(questionUrl)
 				.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print())
 				.andExpect(status().isOk());
 	}
 	
 	@Test
 	public void test50_voteTest() throws Exception {
+		System.out.println("\n===================test50_voteTest");
 		String stringResult = this.mockMvc.perform(post(choiceUrl)
 				.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print())
 				.andReturn().getResponse().getContentAsString();
 		Choice choice = objectMapper.readValue(stringResult, Choice.class);
 		int voteBefore = choice.getVotes();
@@ -97,11 +113,12 @@ public class QuestionsControllerTests {
 		// vote again
 		String afterStringResult = this.mockMvc.perform(post(choiceUrl)
 				.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print())
 				.andReturn().getResponse().getContentAsString();
 		Choice afterChoice = objectMapper.readValue(afterStringResult, Choice.class);
 		int voteAfter = afterChoice.getVotes();
 
-		// difference should be 1
+		// difference between 2 votes should be 1
 		Assert.isTrue((voteAfter-voteBefore)==1, "vote failed");
 	}
 
