@@ -4,19 +4,19 @@
   java -jar polls-0.1.0.jar
   
 # Features  
-  ** Maven build**  
+  **Maven build**  
   **support ORM mapping to a H2 in memory database**  
   **support CORS**  
   **Spring Boot controller test case**  
 
-below are some sample urls:  
-# retrieveEntryPoint
+# sample urls:  
+## retrieveEntryPoint
 url:  
 http://localhost:8080/  
 method:  
 get  
 
-# create new question
+## create new question
 url:  
 http://localhost:8080/questions?page=1  
 method:  
@@ -32,19 +32,19 @@ request body:
   ]  
 }  
 
-# getQuestionDetail
+## getQuestionDetail
 url:  
 http://localhost:8080/questions/5  
 method:  
 get  
 
-# listAllQuestions
+## listAllQuestions
 url:  
 http://localhost:8080/questions?page=1  
 method:  
 get  
 
-# vote
+## vote
 url:  
 http://localhost:8080/questions/1/choices/1  
 method:  
