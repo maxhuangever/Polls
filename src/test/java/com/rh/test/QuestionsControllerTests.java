@@ -89,6 +89,11 @@ public class QuestionsControllerTests {
 				.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print())
 				.andExpect(status().isOk());
+		
+		this.mockMvc.perform(get("/questions").param("page", "10000")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print())
+				.andExpect(status().isNoContent());
 	}
 	
 	@Test
