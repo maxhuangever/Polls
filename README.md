@@ -10,41 +10,41 @@
 
 below are some sample urls:  
 # retrieveEntryPoint
-url:
-http://localhost:8080/
-method:
-get
+url:  
+http://localhost:8080/  
+method:  
+get  
 
 # create new question
-url:
-http://localhost:8080/questions?page=1
-method:
-post
-request body:
-{
-  "question": "Favourite programming language?",
-  "choices": [
-    "Swift",
-    "Python",
-    "Objective-C",
-    "Ruby"
-  ]
-}
+url:  
+http://localhost:8080/questions?page=1  
+method:  
+post  
+request body:  
+{  
+  "question": "Favourite programming language?",  
+  "choices": [  
+    "Swift",  
+    "Python",  
+    "Objective-C",  
+    "Ruby"  
+  ]  
+}  
 
 # getQuestionDetail
-url:
-http://localhost:8080/questions/5
-method:
-get
+url:  
+http://localhost:8080/questions/5  
+method:  
+get  
 
 # listAllQuestions
-url:
-http://localhost:8080/questions?page=1
-method:
-get
+url:  
+http://localhost:8080/questions?page=1  
+method:  
+get  
 
 #vote
-url:
-http://localhost:8080/questions/1/choices/1
-method:
-post
+url:  
+http://localhost:8080/questions/1/choices/1  
+method:  
+post  
