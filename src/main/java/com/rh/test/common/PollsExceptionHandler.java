@@ -1,5 +1,8 @@
 package com.rh.test.common;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
@@ -21,8 +24,11 @@ public class PollsExceptionHandler {
 	public Object ExceptionHandler(HttpServletRequest req, Exception e) throws Exception {
 		logger.error("PollsExceptionHandler---Host {" + req.getRemoteHost() + "} invokes url {" + req.getRequestURL()
 				+ "} ERROR: {" + e.getMessage() + "}");
-		e.printStackTrace();	
-		return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		e.printStackTrace();
+		
+		Map<String,String> error = new HashMap<String,String>();
+		error.put("err_msg", e.getMessage());
+		return new ResponseEntity<Map<String,String> >(error, HttpStatus.BAD_REQUEST);
 	}
 
 }
