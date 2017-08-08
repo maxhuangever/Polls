@@ -43,7 +43,7 @@ http://localhost:8080/questions?page=1
 method:  
 get  
 
-#vote
+# vote
 url:  
 http://localhost:8080/questions/1/choices/1  
 method:  
