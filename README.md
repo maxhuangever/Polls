@@ -1,13 +1,14 @@
 # Polls App
   
 # start it
+  mvn clean package  
   java -jar polls-0.1.0.jar
   
 # Features  
-  **Maven build**  
-  **support ORM mapping to a H2 in memory database**  
-  **support CORS**  
-  **Spring Boot controller test case**  
+  **-Maven build**  
+  **-support ORM mapping to a H2 in memory database**  
+  **-support CORS**  
+  **-Spring Boot controller test case**  
 
 # sample urls:  
 ## retrieveEntryPoint
