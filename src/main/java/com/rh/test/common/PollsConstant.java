@@ -11,7 +11,6 @@ public interface PollsConstant {
 	
 	public final static int PageSize = 10;
 	public final static String SortField = "id";//default sort field for Question
-	
-	
+
 	public final static ResponseEntity<String> Response_NoContent = new ResponseEntity<String>("no entry found", HttpStatus.NO_CONTENT);
 }
