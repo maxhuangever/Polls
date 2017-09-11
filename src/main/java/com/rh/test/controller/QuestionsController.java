@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,10 +22,13 @@ import java.util.Map;
 
 @RestController
 public class QuestionsController {
-    private Log logger = LogFactory.getLog(QuestionsController.class);
+    private static Log logger = LogFactory.getLog(QuestionsController.class);
 
     @Autowired
     private QuestionsService questionsService;
+
+    @Autowired
+    HttpServletRequest request;
 
     @RequestMapping("/")
     public Map<String, String> retrieveEntryPoint() {
@@ -68,18 +72,20 @@ public class QuestionsController {
     public Object uploadFile(
             @RequestParam("userPhoto") MultipartFile uploadFile,
             @RequestParam("userName") String userName) {
-
         logger.info("Single file upload!");
 
         if (uploadFile.isEmpty()) {
             return new ResponseEntity("please select a file!", HttpStatus.OK);
         }
 
-        File tempFile = null;
+        File file = null;
         FileOutputStream fos = null;
+        String fileName = uploadFile.getOriginalFilename();
+        String fileDir = request.getSession().getServletContext().getRealPath("")+File.separator+"upload"+File.separator;
+        createDirIfNotExist(fileDir);
         try {
-            tempFile = File.createTempFile("photostore-", ".tmp", null);
-            fos = new FileOutputStream(tempFile);
+            file = createFile(fileDir, fileName);
+            fos = new FileOutputStream(file);
             fos.write(uploadFile.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
@@ -94,9 +100,37 @@ public class QuestionsController {
         }
 
         Map<String, String> retMap = new HashMap<>();
-        retMap.put("fileName", tempFile.getName());
-        retMap.put("filePath", tempFile.getAbsolutePath());
+        retMap.put("fileName", file.getName());
+        retMap.put("filePath", file.getAbsolutePath());
         return retMap;
+    }
 
+    private static File createFile(String filePath, String fileName){
+        String filenameTemp = filePath+fileName;
+        File file = new File(filenameTemp);
+        try {
+            if(!file.exists()){
+                file.createNewFile();
+                logger.info("success create file,the file is "+filenameTemp);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return file;
+    }
+
+    private static void createDirIfNotExist(String dirName) {
+        File file = new File(dirName);
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                logger.info("dir exists");
+            } else {
+                logger.info("the same name file exists, can not create dir");
+            }
+        } else {
+            logger.info("dir not exists, create it ...");
+            file.mkdir();
+        }
     }
 }
