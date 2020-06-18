@@ -9,7 +9,7 @@
   **-support ORM mapping to a H2 in memory database**  
   **-support CORS**  
   **-Spring Boot controller test case**  
-  **-support AWS CodeBuild
+  **-support AWS CodeBuild 
 
 # sample urls:  
 ## retrieveEntryPoint
